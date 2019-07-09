@@ -9,8 +9,10 @@
 """
 import threading
 from time import sleep
+
 import requests
 from lxml import etree
+
 from common.utils import connect_redis
 
 header = {

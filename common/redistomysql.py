@@ -9,7 +9,6 @@
 @Email   : zhaoboy9692@163.com
 @File    : redistomysql.py
 """
-import sys
 
 import pymysql
 
