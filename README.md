@@ -1,7 +1,6 @@
 #企查查每日新增企业数据抓取
 
 * 尚未完成的工作：
-    * 把所有的数据库、redis配置
     * redis数据转存mysql
     * 代理池尚未设置
     * 企查查限制，每分钟请求大概不能超过30次，所有功能未加并发，请不要使用代理并发，会封账户的
@@ -20,3 +19,4 @@
     * getmoredata.py 获取更多的企业数据，包括经营范围、联系方式等
     * getnewdata.py 获取每日新增企业数据
     * 摒弃以前所用方法，采用新的思路
+   ![话不多说，看图](https://github.com/zhaoboy9692/qccspider/blob/master/demo.png)
