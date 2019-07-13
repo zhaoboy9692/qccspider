@@ -7,81 +7,80 @@
 @Email   : zhaoboy9692@163.com
 @File    : getnewdata.py
 """
-import queue
-import threading
 from time import sleep
 
 import requests
+from apscheduler.schedulers.blocking import BlockingScheduler
 
-from common.utils import connect_redis, ref_access_token, get_yesterday
+from common.utils import connect_redis, get_yesterday, read_data, more_get_token
 
-header = {
-    'Authorization': eval(connect_redis(2).get('access_token'))['access_token'],
-    'User-Agent': 'okhttp/3.11.0'
-}
-
-
-def put_queue(r2, q):
-    """
-    塞入队列
-    :param r2:
-    :param q:
-    :return:
-    """
-    for key in r2.keys('url-*'):
-        key_list = str(key, encoding='utf8').replace('url-', '').split(':')
-        q.put({'city': key_list[0], 'province': key_list[1], 'url': r2.get(key), 'key': key})
+device_id, tim, sign, header = more_get_token()
 
 
 def new_enterprise_main():
-    r2 = connect_redis(2)
+    """
+    获取新增企业数据
+    :return:
+    """
     r = connect_redis(0, 110)
-    q = queue.Queue(20)
-    threading.Thread(target=put_queue, args=(r2, q)).start()
-    sleep(5)
-    print(q.empty())
-    while not q.empty():
-        handle_page(q, r2, r)
-        sleep(1.5)
+    for url, city, province in creat_url():
+        handle_page(url, city, province, r)
     print(get_yesterday(), 'end')
 
 
-def handle_page(q, r2, r):
+def handle_page(url, city, province, r):
     """
-    处理每一个页面的
-    :param q:
-    :param r2:
+    处理每一个页面的url以及数据
+    :param url:
+    :param city:
+    :param province:
     :param r:
     :return:
     """
-    q_page = q.get()
-    city = q_page['city']
-    key = q_page['key']
-    province = q_page['province']
-    url = q_page['url']
+    global device_id, tim, sign, header
     res = requests.get(url, headers=header)
-    print(res.text)
+    print(city, province)
     res_data = dict(eval(res.text.replace('false', 'False').replace('true', 'True').replace('null', 'None')))
     if '200' not in str(res_data):
-        print('权限不足或者accessToken失效，sign失败')
-        header['Authorization'] = ref_access_token()
-        sleep(5)
-        res = requests.get(url, headers=header, timeout=10)
-        res_data = dict(eval(res.text.replace('false', 'False').replace('true', 'True').replace('null', 'None')))
+        while '200' not in str(res_data):
+            sleep(10)
+            print('handle_page', res.text)
+            print('权限不足或者accessToken失效，sign失败')
+            device_id, tim, sign, header = more_get_token()
+            res = requests.get(url, headers=header, timeout=10)
+            res_data = dict(eval(res.text.replace('false', 'False').replace('true', 'True').replace('null', 'None')))
     res.close()
     try:
         qiye_data = res_data.get('result').get('Result')
-        print(city, province)
     except Exception as e:
+        print(e)
         return
     for qiye in qiye_data:
         if qiye.get('StartDate') != get_yesterday(): continue
         qiye['City'] = city
         qiye['Province'] = province
-        r.set(province + city + qiye.get('KeyNo'), str(qiye))
-    print(key)
-    r2.delete(key)
+        r.set(province + city + ':' + qiye.get('KeyNo'), str(qiye))
+
+
+def creat_url():
+    """
+    生产url
+    :return:
+    """
+    for city_data in read_data('other/city_code.txt'):
+        page_index = 0
+        city_data = eval(city_data)
+        while page_index < 55:
+            page_index += 1
+            url = 'https://appv3.qichacha.net/app/v1/base/getNewCompanys?province=' + str(
+                city_data['provinceCode']) + '&cityCode=' + str(
+                city_data['Value']) + '&pageIndex=' + str(
+                page_index) + '&timestamp=' + str(tim) + '&sign=' + sign + '&platform=other&app_channel=qq'
+            yield url, city_data['Desc'], city_data['provinceName']
 
 
 if __name__ == '__main__':
-    new_enterprise_main()
+    scheduler = BlockingScheduler()
+    # 每天执行时间,定点执行
+    scheduler.add_job(new_enterprise_main, 'cron', hour='19', minute='24')
+    scheduler.start()

@@ -12,16 +12,15 @@
 
 import pymysql
 
-from redisutils import r, r1, r3
-from utils import read_data, cpca_data
+from common.utils import connect_redis
 
-conn = pymysql.Connect(host='127.0.0.1', port=3306, user='qidatas', password='KJsniAyhjfzENZG6',
+conn = pymysql.Connect(host='127.0.0.1', port=3306, user='****', password='*****',
                        database='qidatas')
 cursor = conn.cursor()
 
 
 def sql_ex(sql, data):
-    conn = pymysql.Connect(host='127.0.0.1', port=3306, user='qidatas', password='KJsniAyhjfzENZG6',
+    conn = pymysql.Connect(host='127.0.0.1', port=3306, user='*****', password='*****',
                            database='qidatas')
     cursor = conn.cursor()
     cursor.execute(sql, data)
@@ -29,7 +28,7 @@ def sql_ex(sql, data):
 
 
 def sql_many_ex(sql, datas):
-    conn = pymysql.Connect(host='127.0.0.1', port=3306, user='qidatas', password='KJsniAyhjfzENZG6',
+    conn = pymysql.Connect(host='127.0.0.1', port=3306, user='*****', password='*****',
                            database='qidatas')
     cursor = conn.cursor()
     cursor.executemany(sql, datas)
@@ -43,13 +42,14 @@ if __name__ == '__main__':
     sql = "REPLACE INTO qidata(KeyNo,Name,CreditCode,StartDate,Address,RegistCapi,ShortStatus,City,Province,EconKind,OperName,Scope,SubIndustry,TermStart,TeamEnd,OrgNo,BelongOrg,phone,ImageUrl,EndDate,IsOnStock,county,Partnersid,Email) values (%(KeyNo)s,%(Name)s,%(CreditCode)s,%(StartDate)s,%(Address)s,%(RegistCapi)s,%(ShortStatus)s,%(City)s,%(Province)s,%(EconKind)s,%(OperName)s,%(Scope)s,%(SubIndustry)s,%(TermStart)s,%(TeamEnd)s,%(OrgNo)s,%(BelongOrg)s,%(phone)s,%(ImageUrl)s,%(EndDate)s,%(IsOnStock)s,%(county)s,%(Partnersid)s,%(Email)s)"
     datas = []
     i = 0
+    r1 = connect_redis()
     for key in r1.keys():
         i += 1
         data = r1.get(key)
         data = eval(data)
         key = str(key, encoding='utf8')
-        province, city, county = cpca_data(data.get('Address'))
-        data['county'] = county
+        # province, city, county = cpca_data(data.get('Address')) #cpca_data jieba分词方法
+        # data['county'] = county
         data['KeyNo'] = data.get('KeyNo') if data.get('KeyNo') else key[key.find(':') + 1:]
         data['EconKind'] = data.get('EconKind')
         data['Scope'] = data.get('Scope')
@@ -58,8 +58,8 @@ if __name__ == '__main__':
         data['TeamEnd'] = data.get('TeamEnd')
         data['OrgNo'] = data.get('OrgNo')
         data['BelongOrg'] = data.get('BelongOrg')
-        data['City'] = data.get('City') if data.get('City') else city
-        data['Province'] = data.get('Province') if data.get('Province') else province
+        # data['City'] = data.get('City') if data.get('City') else city
+        # data['Province'] = data.get('Province') if data.get('Province') else province
         data['phone'] = data.get('ContactNumber')
         data['ImageUrl'] = data.get('ImageUrl')
         data['EndDate'] = data.get('EndDate')

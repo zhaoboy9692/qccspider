@@ -3,13 +3,16 @@
 """
 @Time    : 2019-06-19 14:28
 @Author  : Xincheng.Zhao
-@Desc    :
+@Desc    : 获取企业的更多信息
 @Email   : zhaoboy9692@163.com
 @File    : getmoredata.py
 """
+import hashlib
 import threading
+import time
 from time import sleep
 
+import execjs
 import requests
 from lxml import etree
 
@@ -25,7 +28,7 @@ header = {
 
 def get_more_data_main():
     """
-    这可以开并发加代理
+    这里可以开并发加代理，没用好的代理源暂时放弃
     :return:
     """
     r = connect_redis(0, 110)
