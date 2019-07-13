@@ -20,3 +20,4 @@
     * getmoredata.py 获取更多的企业数据，包括经营范围、联系方式等
     * getnewdata.py 获取每日新增企业数据
     * 摒弃以前所用方法，采用新的思路
+   ![话不多说，看图](https://github.com/zhaoboy9692/qccspider/blob/master/demo.png)
