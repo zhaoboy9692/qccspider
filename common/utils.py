@@ -50,8 +50,8 @@ def connect_redis(db=0, connect_num=110):
     :return:
     """
     return redis.Redis(
-        connection_pool=redis.ConnectionPool(host='***', port=6379, db=int(db), max_connections=connect_num,
-                                             password='****'))
+        connection_pool=redis.ConnectionPool(host='132.232.11.246', port=6379, db=int(db), max_connections=connect_num,
+                                             password='cwx1995'))
 
 
 def get_yesterday():
@@ -71,7 +71,7 @@ def more_get_token():
         'e += t, 8 != n &&12 != n && 16 != n && 20 != n || (e += "-")}return e}').call('guid')
     md5 = hashlib.md5()
     tim = int(time.time())
-    md5.update(bytes(device_id + str(tim) + 'e747235e58b011e89f066c92bf2c15cd', encoding='utf8'))
+    md5.update(bytes(device_id + str(tim) + '这里的key值请关注【小白技术社】留言获取', encoding='utf8'))
     sign = md5.hexdigest()
     url_get_acc = 'https://appv3.qichacha.net/app/v1/admin/getAccessToken'
     post_data_acc = {"deviceType": 'quickApp', 'os': "quickApp", 'sign': sign,
