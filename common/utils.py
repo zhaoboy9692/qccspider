@@ -29,6 +29,7 @@ def write_data(file_name, data, mode='a'):
     with open(file_name, mode, encoding='utf8') as file:
         for code in data:
             file.write(str(code) + '\n')
+        file.flush()
 
 
 def read_data(file_name):
@@ -50,8 +51,8 @@ def connect_redis(db=0, connect_num=110):
     :return:
     """
     return redis.Redis(
-        connection_pool=redis.ConnectionPool(host='132.232.11.246', port=6379, db=int(db), max_connections=connect_num,
-                                             password='cwx1995'))
+        connection_pool=redis.ConnectionPool(host='******', port=6379, db=int(db), max_connections=connect_num,
+                                             password='****'))
 
 
 def get_yesterday():
@@ -86,5 +87,4 @@ def more_get_token():
     res = requests.post(url_get_acc, data=post_data_acc, headers=header)
     access_token = eval(res.text).get('result').get('access_token')
     header['authorization'] = 'Bearer ' + access_token
-
     return device_id, tim, sign, header
