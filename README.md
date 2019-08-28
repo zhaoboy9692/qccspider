@@ -1,4 +1,7 @@
 #企查查每日新增企业数据抓取
+* 接口
+   * 使用企查查获取token接口 qccspider/common/utils.py 可以看到
+   * 抓取每日新增数据接口 qccspider/getnewdata.py 可以看到
 
 * 尚未完成的工作：
     * redis数据转存mysql
