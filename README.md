@@ -23,4 +23,5 @@
     * 摒弃以前所用方法，采用新的思路
     * 新增将数据写入文本
     * 本代码只做学习交流，请勿用于非法渠道！！！
+    * 本代码已经稳定运行3个多月
    ![话不多说，看图](https://github.com/zhaoboy9692/qccspider/blob/master/demo.png)
