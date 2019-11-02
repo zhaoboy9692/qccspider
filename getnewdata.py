@@ -32,7 +32,7 @@ def new_enterprise_main():
     for url, city, province in creat_url():
         handle_page(url, city, province, r)
         sleep(1.5)
-    print(get_yesterday(), 'end')
+
 
 
 def handle_page(url, city, province, r):

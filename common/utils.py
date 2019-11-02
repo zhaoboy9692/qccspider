@@ -67,6 +67,11 @@ def get_yesterday():
 
 
 def more_get_token():
+    """
+    获取token。
+    企查查升级，该接口失效，新版app的sign规则已经研究出来，可以通过公众号私信，进行技术交流。
+    :return:
+    """
     device_id = execjs.compile(
         'function guid() {for (var e = "", n = 1; n <= 32; n++) {var t = Math.floor(16 * Math.random()).toString(16);'
         'e += t, 8 != n &&12 != n && 16 != n && 20 != n || (e += "-")}return e}').call('guid')

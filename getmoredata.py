@@ -7,12 +7,9 @@
 @Email   : zhaoboy9692@163.com
 @File    : getmoredata.py
 """
-import hashlib
 import threading
-import time
 from time import sleep
 
-import execjs
 import requests
 from lxml import etree
 
