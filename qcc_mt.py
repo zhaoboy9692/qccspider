@@ -20,8 +20,7 @@ class Demo(object):
         # 过滤非企查查接口地址
         if flow.request.host != "appv3.qichacha.net":
             return
-        print(flow.request.query.get("sign"))
-        ctx.log.info(f"sign is: {flow.request.query.get('sign')}")
+        ctx.log.info(f"sign is: {flow.request.query.get('sign')},时间戳 is: {flow.request.query.get('timestamp')}")
 
 
 addons = [
