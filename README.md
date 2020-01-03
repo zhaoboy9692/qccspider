@@ -26,5 +26,5 @@
     * 本代码已经稳定运行3个多月
     * ~~由于企查查反爬策略升级，该代码已经无用。！！！~~
     * 添加拦截sign的脚本
-    * 可以继续使用部分接口，sign算法可以继续用
+    * ~~可以继续使用部分接口，sign算法可以继续用~~
    ![话不多说，看图](https://github.com/zhaoboy9692/qccspider/blob/master/demo.png)
