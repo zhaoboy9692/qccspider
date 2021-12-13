@@ -2,7 +2,7 @@ APScheduler==3.6.0
 certifi==2019.6.16
 chardet==3.0.4
 idna==2.8
-lxml==4.3.4
+lxml==4.6.5
 PyMySQL==0.9.3
 pytz==2019.1
 redis==3.2.1
